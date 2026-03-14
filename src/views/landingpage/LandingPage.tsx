@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Container, Box, Link, Typography, MenuItem, Select, InputLabel, FormControl, Tab, Tabs } from '@mui/material'; import randomString from 'random-string';
 import TextInputField from '../../components/textinputfield/TextInputField';
-import { enterRoomLabel, selectRoomLabel, copyRoomLabel, joinLabel, roomNameLabel, imprintLabel, privacyLabel } from '../../components/translated/translatedComponents';
+import { enterRoomLabel, myRoomsLabel, copyRoomLabel, copiedRoomLabel, joinLabel, roomNameLabel, imprintLabel, privacyLabel } from '../../components/translated/translatedComponents';
 import GenericDialog from '../../components/genericdialog/GenericDialog';
 import StyledBackground from '../../components/StyledBackground';
 import PrecallTitle from '../../components/precalltitle/PrecallTitle';
@@ -21,8 +21,6 @@ const LandingPage = (): React.JSX.Element | null => {
 	const [ activeEntryTab, setActiveEntryTab ] = useState(0);
 	const [ copyFeedback, setCopyFeedback ] = useState(false);
 	
-	const onClicked = () => navigate(`/${roomId}`);
-
 	const privacyUrl = edumeetConfig.privacyUrl ?? '';
 	const imprintUrl = edumeetConfig.imprintUrl ?? '';
 	const qrCodeEnabled = edumeetConfig.qrCodeEnabled;
@@ -30,6 +28,30 @@ const LandingPage = (): React.JSX.Element | null => {
 
 	const dispatch = useAppDispatch();
 	const loggedIn = useAppSelector((state) => state.permissions.loggedIn);
+	const localeInProgress = useAppSelector((state) => state.room.localeInProgress);
+
+	const onClicked = () => navigate(`/${roomId}`);
+
+	const handleRoomSelect = (event: React.ChangeEvent<{ value: unknown }>) => {
+		const selectedValue = event.target.value as string;
+
+		setRoomId(selectedValue);
+	};
+
+	const handleDropdownOpen = () => {
+		dispatch(getData('rooms')).then((roomsData: unknown) => {
+			if (roomsData && typeof roomsData === 'object' && 'data' in roomsData) {
+				setRooms(roomsData.data as Room[]);
+			}
+		});
+	};
+
+	const handleCopyClick = () => {
+		navigator.clipboard.writeText(`${window.location.protocol}//${window.location.hostname}/${roomId}`).then(() => {
+			setCopyFeedback(true);
+			setTimeout(() => setCopyFeedback(false), 2000);
+		});
+	};
 
 	useEffect(() => {
 		if (!roomDropdownEnabled) return;
@@ -61,22 +83,6 @@ const LandingPage = (): React.JSX.Element | null => {
 		});
 	}, [ roomDropdownEnabled, loggedIn ]);
 
-	const localeInProgress = useAppSelector((state) => state.room.localeInProgress);
-
-	const handleRoomSelect = (event: React.ChangeEvent<{ value: unknown }>) => {
-		const selectedValue = event.target.value as string;
-
-		setRoomId(selectedValue);
-	};
-
-	const handleDropdownOpen = () => {
-		dispatch(getData('rooms')).then((roomsData: unknown) => {
-			if (roomsData && typeof roomsData === 'object' && 'data' in roomsData) {
-				setRooms(roomsData.data as Room[]);
-			}
-		});
-	};
-
 	useEffect(() => {
 		if (!roomDropdownEnabled || !loggedIn) return;
 
@@ -97,18 +103,6 @@ const LandingPage = (): React.JSX.Element | null => {
 		};
 	}, [ roomDropdownEnabled, loggedIn, dispatch ]);
 
-	const handleCopyClick = () => {
-		const protocol = window.location.protocol;
-		const hostname = window.location.hostname;
-		const port = window.location.port ? `:${window.location.port}` : '';
-		const fullUrl = `${protocol}//${hostname}${port}/${roomId}`;
-
-		navigator.clipboard.writeText(fullUrl).then(() => {
-			setCopyFeedback(true);
-			setTimeout(() => setCopyFeedback(false), 2000);
-		});
-	};
-
 	if (localeInProgress) {
 		return null;
 	}
@@ -121,7 +115,7 @@ const LandingPage = (): React.JSX.Element | null => {
 				title={ <PrecallTitle /> }
 				content={
 					<Container style={{ textAlign: 'center' }}>
-						{qrCodeEnabled && <QRCode value={`${window.location.protocol}//${window.location.hostname }/${roomId}`} />}
+						{qrCodeEnabled && <QRCode value={`${window.location.protocol}//${window.location.hostname}/${roomId}`} />}
 						{roomDropdownEnabled && loggedIn && rooms.length > 0 && (
 							<Tabs
 								value={activeEntryTab}
@@ -131,7 +125,7 @@ const LandingPage = (): React.JSX.Element | null => {
 								centered={false}
 							>
 								<Tab label={enterRoomLabel()} aria-label={enterRoomLabel()} />
-								<Tab label={selectRoomLabel()} aria-label={selectRoomLabel()} />
+								<Tab label={myRoomsLabel()} aria-label={myRoomsLabel()} />
 							</Tabs>
 						)}
 						{activeEntryTab === 0 && (
@@ -158,7 +152,7 @@ const LandingPage = (): React.JSX.Element | null => {
 											variant='text'
 											onClick={handleCopyClick}
 										>
-											{copyFeedback ? 'Copied!' : copyRoomLabel()}
+											{copyFeedback ? copiedRoomLabel() : copyRoomLabel()}
 										</Button>}
 									value={roomId}
 									label={roomNameLabel()}
