@@ -1,8 +1,15 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+<<<<<<< HEAD
 import { Button, Container, Box, Link, Typography, MenuItem, Select, InputLabel, FormControl, Tab, Tabs } from '@mui/material'; import randomString from 'random-string';
 import TextInputField from '../../components/textinputfield/TextInputField';
 import { enterRoomLabel, myRoomsLabel, copyRoomLabel, copiedRoomLabel, joinLabel, roomNameLabel, imprintLabel, privacyLabel } from '../../components/translated/translatedComponents';
+=======
+import { Button, Container, Box, Link, Typography, MenuItem, Select, InputLabel, FormControl, Tab, Tabs } from '@mui/material';
+import randomString from 'random-string';
+import TextInputField from '../../components/textinputfield/TextInputField';
+import { enterRoomLabel, myRoomsLabel, copyRoomLabel, copiedRoomLabel, joinLabel, roomNameLabel, imprintLabel, joinConsentLabel, privacyPolicyLabel } from '../../components/translated/translatedComponents';
+>>>>>>> letsmeet-test
 import GenericDialog from '../../components/genericdialog/GenericDialog';
 import StyledBackground from '../../components/StyledBackground';
 import PrecallTitle from '../../components/precalltitle/PrecallTitle';
@@ -16,12 +23,20 @@ import { Room } from '../../utils/types';
 const LandingPage = (): React.JSX.Element | null => {
 	const navigate = useNavigate();
 	const randomizeOnBlank = edumeetConfig.randomizeOnBlank;
+<<<<<<< HEAD
 	const randomRoomString = randomString({ length: 8 }).toLowerCase();
 	const [ roomId, setRoomId ] = useState(randomizeOnBlank ? randomRoomString : '');
 	const [ rooms, setRooms ] = useState<Room[]>([]);
 	const [ activeEntryTab, setActiveEntryTab ] = useState(0);
 	const [ copyFeedback, setCopyFeedback ] = useState(false);
 	
+=======
+	const [ roomId, setRoomId ] = useState(randomizeOnBlank ? randomString({ length: 8 }).toLowerCase() : '');
+	const [ rooms, setRooms ] = useState<Room[]>([]);
+	const [ activeEntryTab, setActiveEntryTab ] = useState(0);
+	const [ copyFeedback, setCopyFeedback ] = useState(false);
+
+>>>>>>> letsmeet-test
 	const privacyUrl = edumeetConfig.privacyUrl ?? '';
 	const imprintUrl = edumeetConfig.imprintUrl ?? '';
 	const qrCodeEnabled = edumeetConfig.qrCodeEnabled;
@@ -31,6 +46,11 @@ const LandingPage = (): React.JSX.Element | null => {
 	const loggedIn = useAppSelector((state) => state.permissions.loggedIn);
 	const localeInProgress = useAppSelector((state) => state.room.localeInProgress);
 
+<<<<<<< HEAD
+=======
+	const roomUrl = `${window.location.protocol}//${window.location.hostname}/${roomId}`;
+
+>>>>>>> letsmeet-test
 	const onClicked = () => navigate(`/${roomId}`);
 
 	const handleRoomSelect = (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -40,22 +60,34 @@ const LandingPage = (): React.JSX.Element | null => {
 	};
 
 	const handleTabChange = (_event: React.ChangeEvent<unknown>, value: number) => {
+<<<<<<< HEAD
 		// Reset roomId when switching to My Rooms tab if it's a room name
 		// that doesn't exist in the rooms list
 		if (value === 1 && myRoomsTabEnabled && loggedIn && rooms.length > 0) {
 			const isRoomInList = rooms.some((room) => room.name === roomId);
+=======
+		if (value === 1 && myRoomsTabEnabled && loggedIn && rooms.length > 0) {
+			const isRoomInList = rooms.some((room) => (room.name ?? '') === roomId);
+>>>>>>> letsmeet-test
 
 			if (!isRoomInList && roomId.trim() !== '') {
 				setRoomId('');
 			}
 		}
 
+<<<<<<< HEAD
 		// Generate new random room when switching back to Enter Room tab
 		// and randomizeOnBlank is true
 		if (value === 0 && randomizeOnBlank && roomId === '') {
 			setRoomId(randomRoomString);
 		}
 		
+=======
+		if (value === 0 && randomizeOnBlank && roomId === '') {
+			setRoomId(randomString({ length: 8 }).toLowerCase());
+		}
+
+>>>>>>> letsmeet-test
 		setActiveEntryTab(value);
 	};
 
@@ -68,7 +100,11 @@ const LandingPage = (): React.JSX.Element | null => {
 	};
 
 	const handleCopyClick = () => {
+<<<<<<< HEAD
 		navigator.clipboard.writeText(`${window.location.protocol}//${window.location.hostname}/${roomId}`).then(() => {
+=======
+		navigator.clipboard.writeText(roomUrl).then(() => {
+>>>>>>> letsmeet-test
 			setCopyFeedback(true);
 			setTimeout(() => setCopyFeedback(false), 2000);
 		});
@@ -81,7 +117,11 @@ const LandingPage = (): React.JSX.Element | null => {
 			setActiveEntryTab(1);
 		}
 
+<<<<<<< HEAD
 		if (!loggedIn || rooms.length == 0) {
+=======
+		if (!loggedIn || rooms.length === 0) {
+>>>>>>> letsmeet-test
 			setActiveEntryTab(0);
 		}
 	}, [ loggedIn, rooms ]);
@@ -118,7 +158,11 @@ const LandingPage = (): React.JSX.Element | null => {
 		};
 
 		document.addEventListener('visibilitychange', handleVisibilityChange);
+<<<<<<< HEAD
 		
+=======
+
+>>>>>>> letsmeet-test
 		return () => {
 			document.removeEventListener('visibilitychange', handleVisibilityChange);
 		};
@@ -136,17 +180,25 @@ const LandingPage = (): React.JSX.Element | null => {
 				title={ <PrecallTitle /> }
 				content={
 					<Container style={{ textAlign: 'center' }}>
+<<<<<<< HEAD
 						{qrCodeEnabled && <QRCode value={`${window.location.protocol}//${window.location.hostname}/${roomId}`} />}
+=======
+>>>>>>> letsmeet-test
 						{myRoomsTabEnabled && loggedIn && rooms.length > 0 && (
 							<Tabs
 								value={activeEntryTab}
 								onChange={handleTabChange}
+<<<<<<< HEAD
 								centered={false}
+=======
+								centered
+>>>>>>> letsmeet-test
 							>
 								<Tab label={enterRoomLabel()} aria-label={enterRoomLabel()} />
 								<Tab label={myRoomsLabel()} aria-label={myRoomsLabel()} />
 							</Tabs>
 						)}
+<<<<<<< HEAD
 						{activeEntryTab === 0 && (
 							<Box sx={{ pt: 2 }}>
 								<TextInputField
@@ -186,34 +238,92 @@ const LandingPage = (): React.JSX.Element | null => {
 								</Select>
 							</FormControl>
 						)}
+=======
+						<Box sx={{ minHeight: 80 }}>
+							{activeEntryTab === 0 && (
+								<Box sx={{ pt: 2 }}>
+									<TextInputField
+										label={roomNameLabel()}
+										value={roomId}
+										setValue={setRoomId}
+										onEnter={onClicked}
+										randomizeOnBlank={randomizeOnBlank}
+										autoFocus
+									/>
+								</Box>
+							)}
+							{activeEntryTab === 1 && myRoomsTabEnabled && loggedIn && rooms.length > 0 && (
+								<FormControl fullWidth margin="normal">
+									<InputLabel id="room-select-label">{roomNameLabel()}</InputLabel>
+									<Select
+										labelId="room-select-label"
+										id="room-select"
+										value={roomId}
+										label={roomNameLabel()}
+										onChange={(event) => { handleRoomSelect(event as React.ChangeEvent<{ value: unknown }>); }}
+										onOpen={handleDropdownOpen}
+										autoFocus
+										style={{ textAlign: 'left' }}
+									>
+										{rooms.map((room) => (
+											<MenuItem key={room.id} value={room.name ?? ''}>{room.name ?? ''}</MenuItem>
+										))}
+									</Select>
+								</FormControl>
+							)}
+						</Box>
+						<Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 1, mb: 1 }}>
+							<Typography variant="caption" color="text.secondary" sx={{ wordBreak: 'break-all', textAlign: 'center' }}>
+								{roomUrl}
+							</Typography>
+							<Button
+								size='small'
+								variant='text'
+								onClick={handleCopyClick}
+								disabled={!roomId.trim() || copyFeedback}
+							>
+								{copyFeedback ? copiedRoomLabel() : copyRoomLabel()}
+							</Button>
+						</Box>
+						{qrCodeEnabled && (
+							<Box sx={{ visibility: roomId.trim() ? 'visible' : 'hidden' }}>
+								<QRCode value={roomUrl} size={150} />
+							</Box>
+						)}
+>>>>>>> letsmeet-test
 					</Container>
 				}
 				actions={
-					<Box display="flex" alignItems="center" justifyContent="space-between" width="100%">
+					<Box display="flex" alignItems="flex-end" justifyContent="space-between" width="100%">
 						<Box display="flex" alignItems="left">
 							{imprintUrl.trim() !== '' && (
 								<Link href={imprintUrl} target="_blank" color="inherit" underline="none">
-									<Typography variant="body2">{ imprintLabel() }</Typography>
-								</Link>
-							)}
-							{privacyUrl.trim() !== '' && (
-								<Link href={privacyUrl} target="_blank" color="inherit" underline="none" style={{ marginLeft: '16px' }}>
-									<Typography variant="body2">{ privacyLabel() }</Typography>
+									<Typography variant="caption" color="text.secondary">{ imprintLabel() }</Typography>
 								</Link>
 							)}
 						</Box>
-						<Button
-							onClick={onClicked}
-							variant='contained'
-							disabled={!roomId}
-							size='small'
-						>
-							{ joinLabel()}
-						</Button>
+						<Box display="flex" flexDirection="column" alignItems="flex-end">
+							{privacyUrl.trim() !== '' && (
+								<Typography variant="caption" color="text.secondary" sx={{ mb: 1 }}>
+									{joinConsentLabel()}{' '}
+									<Link href={privacyUrl} target="_blank" color="inherit">
+										{privacyPolicyLabel()}
+									</Link>
+								</Typography>
+							)}
+							<Button
+								onClick={onClicked}
+								variant='contained'
+								disabled={!roomId}
+								size='small'
+							>
+								{ joinLabel()}
+							</Button>
+						</Box>
 					</Box>
 				}
 			/>
-			
+
 		</StyledBackground>
 	);
 };

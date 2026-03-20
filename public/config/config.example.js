@@ -96,7 +96,11 @@ var config = {
 	/**
 	 * Enable/disable tab 'My rooms' in landing page view
 	 */
+<<<<<<< HEAD
 	myRoomsTabEnabled: false,
+=======
+	myRoomsTabEnabled: true,
+>>>>>>> letsmeet-test
 
 
 	/**

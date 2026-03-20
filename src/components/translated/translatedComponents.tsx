@@ -251,7 +251,11 @@ export const myRoomsLabel = (): string => intl.formatMessage({
 
 export const copyRoomLabel = (): string => intl.formatMessage({
 	id: 'label.copyRoom',
+<<<<<<< HEAD
 	defaultMessage: 'Copy'
+=======
+	defaultMessage: 'Copy meeting link'
+>>>>>>> letsmeet-test
 });
 
 export const copiedRoomLabel = (): string => intl.formatMessage({
@@ -892,6 +896,14 @@ export const imprintLabel = (): string => intl.formatMessage({
 export const privacyLabel = (): string => intl.formatMessage({
 	id: 'label.privacy',
 	defaultMessage: 'Privacy'
+});
+export const joinConsentLabel = (): string => intl.formatMessage({
+	id: 'label.joinConsent',
+	defaultMessage: 'By joining, you accept our'
+});
+export const privacyPolicyLabel = (): string => intl.formatMessage({
+	id: 'label.privacyPolicy',
+	defaultMessage: 'Privacy Policy'
 });
 export const countdownTimerTitleLabel = (): string => intl.formatMessage({
 	id: 'label.countdownTimer.title',
